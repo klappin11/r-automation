@@ -1,0 +1,29 @@
+name: Run R Script Daily
+
+on:
+  schedule:
+    - cron: '0 7 * * *'  # This cron schedule triggers the workflow daily at 7 AM UTC
+  workflow_dispatch:  # Allows for manual triggering
+
+jobs:
+  runRScript:
+    runs-on: ubuntu-latest  # Use a Linux environment
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install R
+      run: |
+        sudo apt-get update
+        sudo apt-get install r-base
+
+    - name: Install R packages
+      run: |
+        R -e "install.packages('quantmod')"
+        R -e "install.packages('TTR')"
+        R -e "install.packages('httr')"
+
+    - name: Run R Script
+      run: |
+        Rscript Trading Triggers.R  # Replace with your script name
